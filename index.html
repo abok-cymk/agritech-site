@@ -1,895 +1,2260 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Twiga Foods — Farm to Shelf, Reimagined</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js" defer></script>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <style>
-    :root {
-      --green: #1a6b35;
-      --green-light: #2d9e52;
-      --green-pale: #e8f5ec;
-      --amber: #f5a623;
-      --amber-dark: #d4891a;
-      --soil: #3b2a1a;
-      --cream: #faf7f2;
-      --white: #ffffff;
-      --gray: #6b7280;
-      --dark: #111814;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Twiga Foods — Farm to Shelf, Reimagined</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --green: #1a6b35;
+        --green-light: #2d9e52;
+        --green-pale: #e8f5ec;
+        --amber: #f5a623;
+        --cream: #faf7f2;
+        --gray: #6b7280;
+        --dark: #111814;
+        --nav-h: 64px;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--cream);
+        color: var(--dark);
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Syne", sans-serif;
+      }
+      ::selection {
+        background: var(--green);
+        color: #fff;
+      }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+      /* NAV */
+      nav#navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        height: var(--nav-h);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2.5rem;
+        background: rgba(250, 247, 242, 0.92);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(26, 107, 53, 0.1);
+        transition: box-shadow 0.3s;
+      }
+      nav#navbar.scrolled {
+        box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-family: "Syne", sans-serif;
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--green);
+        text-decoration: none;
+      }
+      .logo-icon {
+        width: 34px;
+        height: 34px;
+        background: var(--green);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .logo-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2.2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-family: "Syne", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--dark);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--green);
+      }
+      .nav-cta {
+        background: var(--green) !important;
+        color: #fff !important;
+        padding: 0.5rem 1.2rem;
+        border-radius: 8px;
+        transition: background 0.2s !important;
+      }
+      .nav-cta:hover {
+        background: var(--green-light) !important;
+      }
 
-    html { scroll-behavior: smooth; }
+      /* HAMBURGER */
+      .hamburger {
+        display: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: transparent;
+        border: 1.5px solid rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+      .hamburger:hover {
+        background: var(--green-pale);
+        border-color: var(--green);
+      }
+      .hamburger span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: var(--dark);
+        border-radius: 2px;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: center;
+      }
+      .hamburger.open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      .hamburger.open span:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      .hamburger.open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--dark);
-      overflow-x: hidden;
-    }
+      /* DRAWER OVERLAY */
+      .drawer-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 190;
+        background: rgba(0, 0, 0, 0);
+        pointer-events: none;
+        transition: background 0.35s;
+      }
+      .drawer-overlay.open {
+        background: rgba(0, 0, 0, 0.48);
+        pointer-events: all;
+      }
 
-    h1, h2, h3, h4, nav { font-family: 'Syne', sans-serif; }
+      /* DRAWER */
+      .drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 195;
+        width: min(320px, 85vw);
+        background: var(--cream);
+        transform: translateX(100%);
+        transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        box-shadow: -8px 0 48px rgba(0, 0, 0, 0.15);
+      }
+      .drawer.open {
+        transform: translateX(0);
+      }
+      .drawer-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.4rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      }
+      .drawer-close {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: none;
+        background: rgba(0, 0, 0, 0.07);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        transition: background 0.2s;
+      }
+      .drawer-close:hover {
+        background: rgba(0, 0, 0, 0.13);
+      }
+      .drawer-nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.25rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .drawer-link {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        padding: 0.8rem 0.9rem;
+        border-radius: 11px;
+        font-family: "Syne", sans-serif;
+        font-size: 0.97rem;
+        font-weight: 600;
+        color: var(--dark);
+        text-decoration: none;
+        transition: all 0.2s;
+        border: 1.5px solid transparent;
+      }
+      .drawer-link .dli {
+        font-size: 1.15rem;
+        width: 26px;
+        text-align: center;
+      }
+      .drawer-link:hover,
+      .drawer-link:active {
+        background: var(--green-pale);
+        color: var(--green);
+        border-color: rgba(26, 107, 53, 0.15);
+      }
+      .drawer-divider {
+        height: 1px;
+        background: rgba(0, 0, 0, 0.07);
+        margin: 0.5rem 0;
+      }
+      .drawer-cta {
+        margin: 1.25rem;
+        padding: 0.95rem;
+        background: var(--green);
+        color: #fff;
+        border-radius: 13px;
+        text-align: center;
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: background 0.2s;
+      }
+      .drawer-cta:hover {
+        background: var(--green-light);
+      }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 4rem;
-      background: rgba(250,247,242,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(26,107,53,0.12);
-      transition: box-shadow .3s;
-    }
-    nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,0.08); }
-    .logo {
-      display: flex; align-items: center; gap: .6rem;
-      font-size: 1.5rem; font-weight: 800; color: var(--green);
-      text-decoration: none;
-    }
-    .logo-icon {
-      width: 36px; height: 36px; background: var(--green);
-      border-radius: 8px; display: flex; align-items: center; justify-content: center;
-    }
-    .logo-icon svg { width: 20px; height: 20px; }
-    .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
-    .nav-links a {
-      font-size: .9rem; font-weight: 600; letter-spacing: .03em;
-      color: var(--dark); text-decoration: none; transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--green); }
-    .nav-cta {
-      background: var(--green); color: white !important;
-      padding: .55rem 1.3rem; border-radius: 8px;
-      transition: background .2s !important;
-    }
-    .nav-cta:hover { background: var(--green-light) !important; color: white !important; }
+      /* HERO */
+      .hero {
+        min-height: 100svh;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 3rem;
+        padding: 4rem 4rem;
+        background: linear-gradient(135deg, var(--cream) 55%, #cfe8d4 100%);
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -80px;
+        right: -80px;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(45, 158, 82, 0.13) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--green-pale);
+        border: 1px solid rgba(26, 107, 53, 0.2);
+        color: var(--green);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.36rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1.3rem;
+        font-family: "Syne", sans-serif;
+      }
+      .hero-eyebrow .dot {
+        width: 6px;
+        height: 6px;
+        background: var(--green);
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .hero h1 {
+        font-size: clamp(2.3rem, 5vw, 4.2rem);
+        font-weight: 800;
+        line-height: 1.08;
+        color: var(--dark);
+        margin-bottom: 1.2rem;
+      }
+      .hero h1 em {
+        color: var(--green);
+        font-style: normal;
+      }
+      .hero-sub {
+        font-size: 1rem;
+        line-height: 1.75;
+        color: var(--gray);
+        max-width: 460px;
+        margin-bottom: 2rem;
+      }
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        background: var(--green);
+        color: #fff;
+        padding: 0.82rem 1.7rem;
+        border-radius: 10px;
+        font-family: "Syne", sans-serif;
+        font-size: 0.92rem;
+        font-weight: 700;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.25s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .btn-primary:hover {
+        background: var(--green-light);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(26, 107, 53, 0.3);
+      }
+      .btn-primary:active {
+        transform: scale(0.96);
+      }
+      .btn-secondary {
+        background: transparent;
+        color: var(--dark);
+        padding: 0.82rem 1.7rem;
+        border-radius: 10px;
+        font-family: "Syne", sans-serif;
+        font-size: 0.92rem;
+        font-weight: 700;
+        text-decoration: none;
+        border: 2px solid rgba(0, 0, 0, 0.14);
+        cursor: pointer;
+        transition: all 0.25s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .btn-secondary:hover {
+        border-color: var(--green);
+        color: var(--green);
+      }
+      .hero-stats {
+        display: flex;
+        gap: 1.8rem;
+        flex-wrap: wrap;
+        margin-top: 2.2rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.09);
+      }
+      .stat-item h3 {
+        font-size: 1.65rem;
+        font-weight: 800;
+        color: var(--green);
+      }
+      .stat-item p {
+        font-size: 0.78rem;
+        color: var(--gray);
+        font-weight: 500;
+        margin-top: 0.12rem;
+      }
 
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: grid; grid-template-columns: 1fr 1fr;
-      align-items: center; gap: 4rem;
-      padding: 8rem 4rem 4rem;
-      background: linear-gradient(135deg, var(--cream) 60%, #d4ead9 100%);
-      position: relative; overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; top: -100px; right: -100px;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(45,158,82,0.12) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: .5rem;
-      background: var(--green-pale); border: 1px solid rgba(26,107,53,0.2);
-      color: var(--green); font-size: .8rem; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase;
-      padding: .4rem 1rem; border-radius: 100px; margin-bottom: 1.5rem;
-    }
-    .hero-eyebrow span { width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
-    .hero h1 {
-      font-size: clamp(2.8rem, 5vw, 4.5rem);
-      font-weight: 800; line-height: 1.08;
-      color: var(--dark); margin-bottom: 1.5rem;
-    }
-    .hero h1 em { color: var(--green); font-style: normal; }
-    .hero p {
-      font-size: 1.1rem; line-height: 1.75; color: var(--gray);
-      max-width: 480px; margin-bottom: 2.5rem;
-    }
-    .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-    .btn-primary {
-      background: var(--green); color: white;
-      padding: .85rem 2rem; border-radius: 10px;
-      font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700;
-      text-decoration: none; border: none; cursor: pointer;
-      transition: all .25s; display: inline-block;
-    }
-    .btn-primary:hover { background: var(--green-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,107,53,0.3); }
-    .btn-secondary {
-      background: transparent; color: var(--dark);
-      padding: .85rem 2rem; border-radius: 10px;
-      font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700;
-      text-decoration: none; border: 2px solid rgba(0,0,0,0.15); cursor: pointer;
-      transition: all .25s; display: inline-flex; align-items: center; gap: .5rem;
-    }
-    .btn-secondary:hover { border-color: var(--green); color: var(--green); }
-    .hero-stats {
-      display: flex; gap: 2.5rem; margin-top: 3rem; padding-top: 2rem;
-      border-top: 1px solid rgba(0,0,0,0.1);
-    }
-    .stat-item h3 { font-size: 1.8rem; font-weight: 800; color: var(--green); }
-    .stat-item p { font-size: .82rem; color: var(--gray); font-weight: 500; margin-top: .2rem; }
+      /* HERO VISUAL */
+      .hero-visual {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hero-map-card {
+        background: #fff;
+        border-radius: 22px;
+        box-shadow: 0 24px 72px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+        width: 100%;
+        max-width: 450px;
+      }
+      .map-header {
+        background: var(--green);
+        padding: 1.1rem 1.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .map-header h4 {
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+      .map-header span {
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 0.76rem;
+      }
+      .map-body {
+        padding: 1.25rem;
+      }
+      .map-svg-wrap {
+        background: #e8f5ec;
+        border-radius: 14px;
+        height: 185px;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 0.9rem;
+      }
+      .map-svg-wrap svg {
+        width: 100%;
+        height: 100%;
+      }
+      .pulse-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: var(--amber);
+        border: 2px solid #fff;
+        position: absolute;
+      }
+      .pulse-dot::after {
+        content: "";
+        position: absolute;
+        inset: -4px;
+        border-radius: 50%;
+        background: rgba(245, 166, 35, 0.4);
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.9);
+          opacity: 0;
+        }
+      }
+      .route-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+      }
+      .route-item {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.5rem 0.65rem;
+        border-radius: 9px;
+        background: var(--cream);
+        font-size: 0.8rem;
+      }
+      .rdot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .route-item span {
+        font-weight: 600;
+        color: var(--dark);
+      }
+      .route-item small {
+        margin-left: auto;
+        color: var(--gray);
+      }
+      .float-badge {
+        position: absolute;
+        background: #fff;
+        border-radius: 13px;
+        box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12);
+        padding: 0.65rem 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .float-badge.b1 {
+        top: 8%;
+        left: -9%;
+        animation: floatY 4s ease-in-out infinite;
+      }
+      .float-badge.b2 {
+        bottom: 12%;
+        right: -7%;
+        animation: floatY 4s ease-in-out infinite;
+        animation-delay: 2s;
+      }
+      @keyframes floatY {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      .float-badge .fi {
+        font-size: 1.3rem;
+      }
+      .float-badge .ft span {
+        display: block;
+        font-size: 0.76rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+      .float-badge .ft small {
+        font-size: 0.68rem;
+        color: var(--gray);
+      }
 
-    /* Hero visual */
-    .hero-visual {
-      position: relative; display: flex; align-items: center; justify-content: center;
-    }
-    .hero-map-card {
-      background: white; border-radius: 24px;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.12);
-      padding: 0; overflow: hidden; width: 100%; max-width: 480px;
-    }
-    .map-header {
-      background: var(--green); padding: 1.2rem 1.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .map-header h4 { color: white; font-size: .95rem; font-weight: 700; }
-    .map-header span { color: rgba(255,255,255,0.7); font-size: .8rem; }
-    .map-body { padding: 1.5rem; }
-    .map-svg-wrap {
-      background: #e8f5ec; border-radius: 16px; overflow: hidden;
-      height: 200px; position: relative; margin-bottom: 1.2rem;
-    }
-    .map-svg-wrap svg { width: 100%; height: 100%; }
-    .route-dot {
-      width: 12px; height: 12px; border-radius: 50%; background: var(--amber);
-      border: 2px solid white; position: absolute;
-      animation: ping 2s cubic-bezier(0,0,.2,1) infinite;
-    }
-    @keyframes ping {
-      0% { transform: scale(1); opacity: 1; }
-      75%, 100% { transform: scale(2.5); opacity: 0; }
-    }
-    .route-list { display: flex; flex-direction: column; gap: .6rem; }
-    .route-item {
-      display: flex; align-items: center; gap: .75rem;
-      padding: .6rem .75rem; border-radius: 10px;
-      background: var(--cream); font-size: .85rem;
-    }
-    .route-dot-sm {
-      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-    }
-    .route-item span { font-weight: 600; color: var(--dark); }
-    .route-item small { margin-left: auto; color: var(--gray); }
+      /* MARQUEE */
+      .marquee-bar {
+        background: var(--green);
+        padding: 0.88rem 0;
+        overflow: hidden;
+      }
+      .marquee-track {
+        display: flex;
+        gap: 2.5rem;
+        width: max-content;
+        animation: marquee 22s linear infinite;
+      }
+      .marquee-track:hover {
+        animation-play-state: paused;
+      }
+      .mi {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.8rem;
+        font-weight: 600;
+        white-space: nowrap;
+        font-family: "Syne", sans-serif;
+      }
+      .mi::before {
+        content: "✦";
+        color: var(--amber);
+        font-size: 0.62rem;
+      }
+      @keyframes marquee {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
 
-    /* Floating badges */
-    .float-badge {
-      position: absolute; background: white; border-radius: 14px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-      padding: .75rem 1rem; display: flex; align-items: center; gap: .6rem;
-      animation: float 4s ease-in-out infinite;
-    }
-    .float-badge.b1 { top: 10%; left: -10%; animation-delay: 0s; }
-    .float-badge.b2 { bottom: 15%; right: -8%; animation-delay: 2s; }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    .float-badge .icon { font-size: 1.4rem; }
-    .float-badge .text span { display: block; font-size: .8rem; font-weight: 700; color: var(--dark); }
-    .float-badge .text small { font-size: .72rem; color: var(--gray); }
+      /* SECTIONS */
+      section {
+        padding: 5.5rem 4rem;
+      }
+      .eyebrow {
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--green);
+        margin-bottom: 0.65rem;
+        font-family: "Syne", sans-serif;
+      }
+      .sec-title {
+        font-size: clamp(1.8rem, 3.5vw, 2.9rem);
+        font-weight: 800;
+        line-height: 1.15;
+        color: var(--dark);
+        margin-bottom: 0.85rem;
+      }
+      .sec-sub {
+        font-size: 0.98rem;
+        color: var(--gray);
+        line-height: 1.7;
+        max-width: 500px;
+      }
 
-    /* ── MARQUEE ── */
-    .marquee-section {
-      background: var(--green); padding: 1rem 0; overflow: hidden;
-    }
-    .marquee-track {
-      display: flex; gap: 3rem; animation: marquee 20s linear infinite;
-      width: max-content;
-    }
-    .marquee-item {
-      display: flex; align-items: center; gap: .75rem;
-      color: rgba(255,255,255,0.85); font-size: .85rem; font-weight: 600;
-      white-space: nowrap; font-family: 'Syne', sans-serif;
-    }
-    .marquee-item::before { content: '✦'; color: var(--amber); font-size: .7rem; }
-    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+      /* HOW IT WORKS */
+      .how-sec {
+        background: var(--dark);
+      }
+      .how-sec .eyebrow {
+        color: var(--amber);
+      }
+      .how-sec .sec-title {
+        color: #fff;
+      }
+      .how-sec .sec-sub {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 3.5rem;
+        position: relative;
+      }
+      .steps-grid::before {
+        content: "";
+        position: absolute;
+        top: 56px;
+        left: calc(16.66%+1rem);
+        right: calc(16.66%+1rem);
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          var(--amber),
+          transparent,
+          var(--green-light)
+        );
+        z-index: 0;
+      }
+      .step-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 1.75rem;
+        position: relative;
+        z-index: 1;
+        transition: all 0.3s;
+      }
+      .step-card:hover {
+        background: rgba(255, 255, 255, 0.09);
+        transform: translateY(-4px);
+      }
+      .step-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.25rem;
+      }
+      .step-icon.g {
+        background: rgba(45, 158, 82, 0.2);
+      }
+      .step-icon.a {
+        background: rgba(245, 166, 35, 0.2);
+      }
+      .step-icon.m {
+        background: rgba(45, 158, 82, 0.12);
+      }
+      .step-card h3 {
+        color: #fff;
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+      }
+      .step-card p {
+        color: rgba(255, 255, 255, 0.48);
+        font-size: 0.86rem;
+        line-height: 1.65;
+      }
+      .step-connector {
+        display: none;
+        width: 2px;
+        height: 28px;
+        background: linear-gradient(var(--amber), var(--green-light));
+        margin: 0 auto;
+        border-radius: 2px;
+      }
 
-    /* ── SECTION COMMONS ── */
-    section { padding: 6rem 4rem; }
-    .section-eyebrow {
-      font-size: .78rem; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--green);
-      margin-bottom: .75rem; font-family: 'Syne', sans-serif;
-    }
-    .section-title {
-      font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 800;
-      line-height: 1.15; color: var(--dark); margin-bottom: 1rem;
-    }
-    .section-sub {
-      font-size: 1.05rem; color: var(--gray); line-height: 1.7;
-      max-width: 520px;
-    }
+      /* PRODUCTS */
+      .products-sec {
+        background: var(--cream);
+      }
+      .filter-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .filter-wrap::-webkit-scrollbar {
+        display: none;
+      }
+      .filter-tabs {
+        display: flex;
+        gap: 0.45rem;
+        width: max-content;
+      }
+      .filter-tab {
+        padding: 0.4rem 1rem;
+        border-radius: 100px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        font-family: "Syne", sans-serif;
+        border: 1.5px solid rgba(0, 0, 0, 0.14);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: var(--dark);
+        white-space: nowrap;
+      }
+      .filter-tab.active,
+      .filter-tab:hover {
+        background: var(--green);
+        color: #fff;
+        border-color: var(--green);
+      }
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.3rem;
+      }
+      .product-card {
+        background: #fff;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+      }
+      .product-card:active {
+        transform: scale(0.97);
+      }
+      .prod-img {
+        height: 155px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.4rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .prod-badge {
+        position: absolute;
+        top: 0.6rem;
+        left: 0.6rem;
+        background: var(--amber);
+        color: #fff;
+        font-size: 0.66rem;
+        font-weight: 700;
+        font-family: "Syne", sans-serif;
+        padding: 0.2rem 0.55rem;
+        border-radius: 100px;
+        letter-spacing: 0.04em;
+      }
+      .prod-badge.g {
+        background: var(--green);
+      }
+      .prod-info {
+        padding: 1rem;
+      }
+      .prod-info h4 {
+        font-size: 0.88rem;
+        font-weight: 700;
+        margin-bottom: 0.22rem;
+        color: var(--dark);
+      }
+      .prod-origin {
+        font-size: 0.74rem;
+        color: var(--gray);
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.22rem;
+      }
+      .prod-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .prod-price {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--green);
+        font-family: "Syne", sans-serif;
+      }
+      .prod-price span {
+        font-size: 0.72rem;
+        color: var(--gray);
+        font-weight: 400;
+        font-family: "DM Sans", sans-serif;
+      }
+      .add-btn {
+        width: 33px;
+        height: 33px;
+        border-radius: 9px;
+        background: var(--green);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+      .add-btn:hover {
+        background: var(--green-light);
+        transform: scale(1.1);
+      }
+      .add-btn:active {
+        transform: scale(0.9);
+      }
 
-    /* ── HOW IT WORKS ── */
-    .how-section { background: var(--dark); }
-    .how-section .section-eyebrow { color: var(--amber); }
-    .how-section .section-title { color: white; }
-    .how-section .section-sub { color: rgba(255,255,255,0.55); }
-    .steps-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 4rem;
-      position: relative;
-    }
-    .steps-grid::before {
-      content: '';
-      position: absolute; top: 60px; left: calc(16.66% + 1rem); right: calc(16.66% + 1rem);
-      height: 2px; background: linear-gradient(90deg, var(--amber), transparent, var(--green-light));
-      z-index: 0;
-    }
-    .step-card {
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px; padding: 2rem; position: relative; z-index: 1;
-      transition: all .3s;
-    }
-    .step-card:hover { background: rgba(255,255,255,0.09); transform: translateY(-4px); }
-    .step-num {
-      width: 52px; height: 52px; border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem; margin-bottom: 1.5rem;
-    }
-    .step-num.green { background: rgba(45,158,82,0.2); }
-    .step-num.amber { background: rgba(245,166,35,0.2); }
-    .step-num.mixed { background: rgba(45,158,82,0.12); }
-    .step-card h3 { color: white; font-size: 1.15rem; margin-bottom: .75rem; }
-    .step-card p { color: rgba(255,255,255,0.5); font-size: .9rem; line-height: 1.65; }
+      /* IMPACT */
+      .impact-sec {
+        background: linear-gradient(135deg, #1a6b35 0%, #0f4a24 100%);
+        position: relative;
+        overflow: hidden;
+      }
+      .impact-sec::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/svg%3E");
+      }
+      .impact-sec .eyebrow {
+        color: var(--amber);
+      }
+      .impact-sec .sec-title {
+        color: #fff;
+      }
+      .impact-sec .sec-sub {
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .impact-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        margin-top: 3.5rem;
+      }
+      .impact-card {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+        padding: 1.75rem;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        transition: all 0.3s;
+      }
+      .impact-card:hover {
+        background: rgba(255, 255, 255, 0.11);
+      }
+      .imp-icon {
+        font-size: 2.2rem;
+        margin-bottom: 0.8rem;
+      }
+      .imp-num {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #fff;
+        font-family: "Syne", sans-serif;
+        line-height: 1;
+      }
+      .imp-num span {
+        color: var(--amber);
+      }
+      .imp-label {
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 0.82rem;
+        margin-top: 0.5rem;
+        line-height: 1.5;
+      }
 
-    /* ── PRODUCTS ── */
-    .products-section { background: var(--cream); }
-    .products-header {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      margin-bottom: 3rem; gap: 2rem;
-    }
-    .filter-tabs {
-      display: flex; gap: .5rem; flex-wrap: wrap;
-    }
-    .filter-tab {
-      padding: .45rem 1.1rem; border-radius: 100px;
-      font-size: .83rem; font-weight: 600; font-family: 'Syne', sans-serif;
-      border: 1.5px solid rgba(0,0,0,0.15); background: transparent;
-      cursor: pointer; transition: all .2s; color: var(--dark);
-    }
-    .filter-tab.active, .filter-tab:hover {
-      background: var(--green); color: white; border-color: var(--green);
-    }
-    .products-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
-    }
-    .product-card {
-      background: white; border-radius: 20px; overflow: hidden;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.06); transition: all .3s; cursor: pointer;
-    }
-    .product-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.1); }
-    .product-img {
-      height: 180px; display: flex; align-items: center; justify-content: center;
-      font-size: 4rem; position: relative; overflow: hidden;
-    }
-    .product-badge {
-      position: absolute; top: .75rem; left: .75rem;
-      background: var(--amber); color: white;
-      font-size: .72rem; font-weight: 700; font-family: 'Syne', sans-serif;
-      padding: .25rem .65rem; border-radius: 100px; letter-spacing: .04em;
-    }
-    .product-badge.green { background: var(--green); }
-    .product-info { padding: 1.25rem; }
-    .product-info h4 { font-size: .95rem; font-weight: 700; margin-bottom: .3rem; color: var(--dark); }
-    .product-info .origin { font-size: .78rem; color: var(--gray); margin-bottom: .75rem; display: flex; align-items: center; gap: .3rem; }
-    .product-footer { display: flex; align-items: center; justify-content: space-between; }
-    .product-price { font-size: 1rem; font-weight: 700; color: var(--green); font-family: 'Syne', sans-serif; }
-    .product-price span { font-size: .78rem; color: var(--gray); font-weight: 400; font-family: 'DM Sans', sans-serif; }
-    .add-btn {
-      width: 34px; height: 34px; border-radius: 10px; background: var(--green);
-      color: white; border: none; cursor: pointer; font-size: 1.2rem;
-      display: flex; align-items: center; justify-content: center; transition: all .2s;
-    }
-    .add-btn:hover { background: var(--green-light); transform: scale(1.1); }
+      /* TESTIMONIALS */
+      .testi-sec {
+        background: #fff;
+      }
+      .testi-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+        margin-top: 3rem;
+      }
+      .testi-card {
+        background: var(--cream);
+        border-radius: 18px;
+        padding: 1.65rem;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        transition: all 0.3s;
+      }
+      .testi-card:hover {
+        box-shadow: 0 8px 36px rgba(0, 0, 0, 0.08);
+        transform: translateY(-4px);
+      }
+      .t-stars {
+        color: var(--amber);
+        font-size: 0.92rem;
+        margin-bottom: 0.8rem;
+        letter-spacing: 0.08em;
+      }
+      .t-text {
+        font-size: 0.9rem;
+        line-height: 1.72;
+        color: var(--dark);
+        margin-bottom: 1.25rem;
+        font-style: italic;
+      }
+      .t-author {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+      }
+      .t-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .t-author h5 {
+        font-size: 0.86rem;
+        font-weight: 700;
+        color: var(--dark);
+      }
+      .t-author p {
+        font-size: 0.73rem;
+        color: var(--gray);
+      }
 
-    /* ── IMPACT ── */
-    .impact-section {
-      background: linear-gradient(135deg, #1a6b35 0%, #0f4a24 100%);
-      position: relative; overflow: hidden;
-    }
-    .impact-section::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-    .impact-section .section-eyebrow { color: var(--amber); }
-    .impact-section .section-title { color: white; }
-    .impact-section .section-sub { color: rgba(255,255,255,0.6); }
-    .impact-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 4rem;
-    }
-    .impact-card {
-      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 20px; padding: 2rem; text-align: center; position: relative; z-index: 1;
-      transition: all .3s;
-    }
-    .impact-card:hover { background: rgba(255,255,255,0.11); }
-    .impact-icon { font-size: 2.5rem; margin-bottom: 1rem; }
-    .impact-number {
-      font-size: 2.8rem; font-weight: 800; color: white; font-family: 'Syne', sans-serif;
-      line-height: 1;
-    }
-    .impact-number span { color: var(--amber); }
-    .impact-label { color: rgba(255,255,255,0.6); font-size: .88rem; margin-top: .5rem; line-height: 1.5; }
+      /* CTA */
+      .cta-sec {
+        background: var(--cream);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 6rem 2rem;
+      }
+      .cta-inner {
+        max-width: 600px;
+        width: 100%;
+      }
+      .cta-form {
+        display: flex;
+        gap: 0.45rem;
+        background: #fff;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        padding: 0.4rem 0.4rem 0.4rem 0.85rem;
+        max-width: 420px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .cta-form input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 0.9rem;
+        background: transparent;
+        font-family: "DM Sans", sans-serif;
+        min-width: 0;
+      }
 
-    /* ── TESTIMONIALS ── */
-    .testi-section { background: white; }
-    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3.5rem; }
-    .testi-card {
-      background: var(--cream); border-radius: 20px; padding: 2rem;
-      border: 1px solid rgba(0,0,0,0.06); transition: all .3s;
-    }
-    .testi-card:hover { box-shadow: 0 8px 40px rgba(0,0,0,0.08); transform: translateY(-4px); }
-    .testi-stars { color: var(--amber); font-size: 1rem; margin-bottom: 1rem; letter-spacing: .1em; }
-    .testi-text {
-      font-size: .95rem; line-height: 1.7; color: var(--dark);
-      margin-bottom: 1.5rem; font-style: italic;
-    }
-    .testi-author { display: flex; align-items: center; gap: .75rem; }
-    .testi-avatar {
-      width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center;
-      justify-content: center; font-size: 1.2rem; flex-shrink: 0;
-    }
-    .testi-author h5 { font-size: .9rem; font-weight: 700; color: var(--dark); }
-    .testi-author p { font-size: .78rem; color: var(--gray); }
+      /* FOOTER */
+      footer {
+        background: var(--dark);
+        color: rgba(255, 255, 255, 0.55);
+        padding: 4rem 4rem 2rem;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 2.5rem;
+        margin-bottom: 2.5rem;
+      }
+      .footer-brand h3 {
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin-bottom: 0.65rem;
+      }
+      .footer-brand p {
+        font-size: 0.84rem;
+        line-height: 1.7;
+        max-width: 265px;
+      }
+      .footer-col h4 {
+        color: #fff;
+        font-size: 0.84rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        letter-spacing: 0.04em;
+      }
+      .footer-col ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .footer-col ul a {
+        color: rgba(255, 255, 255, 0.45);
+        text-decoration: none;
+        font-size: 0.82rem;
+        transition: color 0.2s;
+      }
+      .footer-col ul a:hover {
+        color: #fff;
+      }
+      .footer-socials {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 1.25rem;
+      }
+      .soc-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.84rem;
+        text-decoration: none;
+        transition: background 0.2s;
+      }
+      .soc-btn:hover {
+        background: var(--green);
+      }
+      .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        padding-top: 1.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.77rem;
+      }
+      .footer-bottom a {
+        color: rgba(255, 255, 255, 0.35);
+        text-decoration: none;
+      }
 
-    /* ── CTA ── */
-    .cta-section {
-      background: var(--cream); display: flex; align-items: center;
-      justify-content: center; text-align: center; padding: 6rem 4rem;
-    }
-    .cta-inner { max-width: 640px; }
-    .cta-inner .section-eyebrow { justify-content: center; display: block; }
-    .cta-inner .section-title { margin-bottom: 1rem; }
-    .cta-inner p { margin: 0 auto 2.5rem; }
-    .cta-actions { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-    .cta-form {
-      display: flex; gap: .5rem; background: white;
-      border: 2px solid rgba(0,0,0,0.1); border-radius: 12px;
-      padding: .4rem .4rem .4rem .8rem; max-width: 420px; width: 100%;
-    }
-    .cta-form input {
-      flex: 1; border: none; outline: none; font-size: .95rem;
-      background: transparent; font-family: 'DM Sans', sans-serif;
-    }
+      /* TOAST */
+      .toast {
+        position: fixed;
+        bottom: 1.5rem;
+        left: 50%;
+        z-index: 300;
+        transform: translateX(-50%) translateY(120px);
+        background: var(--green);
+        color: #fff;
+        border-radius: 14px;
+        padding: 0.88rem 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        box-shadow: 0 8px 32px rgba(26, 107, 53, 0.35);
+        font-family: "Syne", sans-serif;
+        font-weight: 600;
+        font-size: 0.86rem;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      .toast.show {
+        transform: translateX(-50%) translateY(0);
+      }
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--dark); color: rgba(255,255,255,0.6);
-      padding: 4rem 4rem 2rem;
-    }
-    .footer-grid {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
-      margin-bottom: 3rem;
-    }
-    .footer-brand h3 { color: white; font-size: 1.3rem; font-weight: 800; margin-bottom: .75rem; }
-    .footer-brand p { font-size: .88rem; line-height: 1.7; max-width: 280px; }
-    .footer-col h4 { color: white; font-size: .88rem; font-weight: 700; margin-bottom: 1.2rem; letter-spacing: .05em; }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
-    .footer-col ul a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: .85rem; transition: color .2s; }
-    .footer-col ul a:hover { color: white; }
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-      font-size: .8rem;
-    }
-    .footer-bottom a { color: rgba(255,255,255,0.4); text-decoration: none; }
-    .footer-socials { display: flex; gap: .75rem; }
-    .social-btn {
-      width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.08);
-      display: flex; align-items: center; justify-content: center; font-size: .9rem;
-      text-decoration: none; transition: background .2s;
-    }
-    .social-btn:hover { background: var(--green); }
+      /* BOTTOM MOBILE NAV */
+      .bottom-nav {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 185;
+        background: rgba(250, 247, 242, 0.96);
+        backdrop-filter: blur(16px);
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 0.55rem 0 calc(0.55rem + env(safe-area-inset-bottom));
+      }
+      .bottom-nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+      }
+      .bn-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.28rem;
+        text-decoration: none;
+        color: var(--gray);
+        font-family: "Syne", sans-serif;
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 0.28rem 0.45rem;
+        border-radius: 9px;
+        transition: all 0.2s;
+        min-width: 52px;
+      }
+      .bn-icon {
+        font-size: 1.2rem;
+        line-height: 1;
+      }
+      .bn-item.active {
+        color: var(--green);
+      }
+      .bn-dot {
+        width: 4px;
+        height: 4px;
+        background: transparent;
+        border-radius: 50%;
+        margin-top: 0.12rem;
+        transition: background 0.2s;
+      }
+      .bn-item.active .bn-dot {
+        background: var(--green);
+      }
+      .bn-cta-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.28rem;
+        text-decoration: none;
+      }
+      .bn-cta-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+        background: var(--green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        box-shadow: 0 4px 16px rgba(26, 107, 53, 0.4);
+        transition: all 0.2s;
+        margin-top: -14px;
+      }
+      .bn-cta-btn:active {
+        transform: scale(0.92);
+      }
+      .bn-cta-lbl {
+        font-family: "Syne", sans-serif;
+        font-size: 0.6rem;
+        font-weight: 700;
+        color: var(--green);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
 
-    /* ── CART TOAST ── */
-    .toast {
-      position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
-      background: var(--green); color: white; border-radius: 14px;
-      padding: 1rem 1.5rem; display: flex; align-items: center; gap: .75rem;
-      box-shadow: 0 8px 32px rgba(26,107,53,0.35); font-family: 'Syne', sans-serif; font-weight: 600;
-      transform: translateY(120%); transition: transform .4s cubic-bezier(.34,1.56,.64,1);
-      pointer-events: none;
-    }
-    .toast.show { transform: translateY(0); }
+      /* TABLET ≤1024 */
+      @media (max-width: 1024px) {
+        nav#navbar {
+          padding: 0 1.5rem;
+        }
+        .nav-links {
+          display: none;
+        }
+        .hamburger {
+          display: flex;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          padding: 2rem;
+          gap: 2.5rem;
+        }
+        .hero::before {
+          width: 280px;
+          height: 280px;
+          top: -40px;
+          right: -40px;
+        }
+        .hero-visual {
+          display: none;
+        }
+        section {
+          padding: 4rem 2rem;
+        }
+        .steps-grid {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+        .steps-grid::before {
+          display: none;
+        }
+        .step-connector {
+          display: block;
+        }
+        .products-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .impact-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .testi-grid {
+          grid-template-columns: 1fr;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+        footer {
+          padding: 3rem 2rem 2rem;
+        }
+      }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 1024px) {
-      nav { padding: 1rem 2rem; }
-      .hero { grid-template-columns: 1fr; padding: 7rem 2rem 3rem; gap: 3rem; }
-      .hero-visual { display: none; }
-      section { padding: 4rem 2rem; }
-      .products-grid { grid-template-columns: repeat(2, 1fr); }
-      .impact-grid { grid-template-columns: repeat(2, 1fr); }
-      .testi-grid { grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: 1fr; }
-      .steps-grid::before { display: none; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 640px) {
-      .nav-links { display: none; }
-      .products-header { flex-direction: column; align-items: flex-start; }
-      .products-grid { grid-template-columns: 1fr 1fr; }
-      .impact-grid { grid-template-columns: 1fr 1fr; }
-      .hero-stats { gap: 1.5rem; }
-      footer { padding: 3rem 1.5rem 1.5rem; }
-      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
-    }
-  </style>
-</head>
-<body x-data="twigaApp()">
+      /* MOBILE ≤640 */
+      @media (max-width: 640px) {
+        :root {
+          --nav-h: 60px;
+        }
+        nav#navbar {
+          padding: 0 1rem;
+        }
+        .logo {
+          font-size: 1.2rem;
+        }
+        .logo-icon {
+          width: 30px;
+          height: 30px;
+        }
 
-  <!-- NAV -->
-  <nav id="navbar">
-    <a href="#" class="logo">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-          <path d="M12 6v6l4 2"/>
-        </svg>
-      </div>
-      Twiga Foods
-    </a>
-    <ul class="nav-links">
-      <li><a href="#how">How It Works</a></li>
-      <li><a href="#products">Products</a></li>
-      <li><a href="#impact">Impact</a></li>
-      <li><a href="#farmers">For Farmers</a></li>
-      <li><a href="#cta" class="nav-cta">Get Started</a></li>
-    </ul>
-  </nav>
+        .hero {
+          grid-template-columns: 1fr;
+          padding: 1rem;
+          gap: 1.8rem;
+          min-height: auto;
+        }
+        .hero::before {
+          display: none;
+        }
+        /* Show map card on mobile */
+        .hero-visual {
+          display: flex;
+          margin: 0 auto;
+          max-width: 100%;
+          width: 100%;
+        }
+        .float-badge {
+          display: none;
+        }
+        .hero h1 {
+          font-size: clamp(1.9rem, 7.5vw, 2.6rem);
+        }
+        .hero-sub {
+          font-size: 0.92rem;
+          max-width: 100%;
+        }
+        .hero-stats {
+          gap: 1.1rem;
+        }
+        .stat-item h3 {
+          font-size: 1.35rem;
+        }
+        .stat-item p {
+          font-size: 0.74rem;
+        }
+        .btn-primary,
+        .btn-secondary {
+          padding: 0.75rem 1.3rem;
+          font-size: 0.88rem;
+        }
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <div class="hero-eyebrow">
-        <span></span> Kenya's Leading Agri-Tech Platform
-      </div>
-      <h1>Fresh From <em>Farm</em> To Your Shelf — Reimagined</h1>
-      <p>Twiga connects 17,000+ smallholder farmers directly to urban retailers, cutting costs by 25% and eliminating the middlemen holding Kenya's food system back.</p>
-      <div class="hero-actions">
-        <a href="#products" class="btn-primary">Browse Products</a>
-        <a href="#how" class="btn-secondary">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M6 8l2 2 2-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        section {
+          padding: 3.2rem 1rem;
+        }
+        .sec-title {
+          font-size: clamp(1.55rem, 6vw, 2.1rem);
+        }
+
+        .products-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.9rem;
+        }
+        .prod-img {
+          height: 120px;
+          font-size: 2.6rem;
+        }
+        .prod-info {
+          padding: 0.85rem;
+        }
+        .prod-info h4 {
+          font-size: 0.82rem;
+        }
+
+        .impact-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 0.9rem;
+        }
+        .impact-card {
+          padding: 1.25rem;
+        }
+        .imp-num {
+          font-size: 2rem;
+        }
+        .imp-icon {
+          font-size: 1.8rem;
+        }
+
+        .cta-form {
+          flex-direction: column;
+          border-radius: 14px;
+          padding: 0.7rem;
+          gap: 0.55rem;
+        }
+        .cta-form input {
+          padding: 0.45rem 0.2rem;
+        }
+        .cta-form .btn-primary {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 1.6rem;
+        }
+        footer {
+          padding: 2.5rem 1rem 5.5rem;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          gap: 0.45rem;
+          text-align: center;
+        }
+
+        .bottom-nav {
+          display: block;
+        }
+        .toast {
+          bottom: calc(70px + 1rem);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav id="navbar" role="navigation" aria-label="Main navigation">
+      <a href="#home" class="logo" aria-label="Twiga Foods home">
+        <div class="logo-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
           </svg>
-          See how it works
-        </a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat-item">
-          <h3>17K+</h3>
-          <p>Farmers connected</p>
         </div>
-        <div class="stat-item">
-          <h3>8K+</h3>
-          <p>Retail vendors</p>
-        </div>
-        <div class="stat-item">
-          <h3>25%</h3>
-          <p>Cost reduction</p>
-        </div>
-        <div class="stat-item">
-          <h3>$30M+</h3>
-          <p>Capital raised</p>
-        </div>
-      </div>
-    </div>
+        Twiga Foods
+      </a>
+      <ul class="nav-links" aria-label="Site sections">
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#impact">Impact</a></li>
+        <li><a href="#farmers">For Farmers</a></li>
+        <li><a href="#cta" class="nav-cta">Get Started</a></li>
+      </ul>
+      <button
+        class="hamburger"
+        id="hamburger"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="drawer"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
 
-    <div class="hero-visual">
-      <!-- Floating badge 1 -->
-      <div class="float-badge b1">
-        <span class="icon">🌿</span>
-        <div class="text">
-          <span>Fresh Kales</span>
-          <small>Just harvested · Murang'a</small>
-        </div>
-      </div>
+    <!-- DRAWER OVERLAY -->
+    <div
+      class="drawer-overlay"
+      id="drawerOverlay"
+      aria-hidden="true"
+      role="presentation"
+    ></div>
 
-      <!-- Main card -->
-      <div class="hero-map-card">
-        <div class="map-header">
-          <h4>🚛 Live Delivery Network</h4>
-          <span>Nairobi Region</span>
-        </div>
-        <div class="map-body">
-          <!-- Kenya/Nairobi stylized SVG map -->
-          <div class="map-svg-wrap">
-            <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-              <rect width="400" height="200" fill="#e8f5ec"/>
-              <!-- Stylized road network -->
-              <path d="M200,100 Q150,60 80,80 Q40,90 20,100" stroke="#c5e0cb" stroke-width="6" fill="none" stroke-linecap="round"/>
-              <path d="M200,100 Q220,70 280,60 Q340,50 380,40" stroke="#c5e0cb" stroke-width="6" fill="none" stroke-linecap="round"/>
-              <path d="M200,100 Q210,140 250,160 Q300,180 380,175" stroke="#c5e0cb" stroke-width="6" fill="none" stroke-linecap="round"/>
-              <path d="M200,100 Q180,140 140,165 Q80,185 20,170" stroke="#c5e0cb" stroke-width="6" fill="none" stroke-linecap="round"/>
-              <!-- Route highlight -->
-              <path d="M80,80 Q140,90 200,100" stroke="#1a6b35" stroke-width="3" fill="none" stroke-dasharray="6,4" stroke-linecap="round"/>
-              <path d="M200,100 Q240,130 290,150" stroke="#f5a623" stroke-width="3" fill="none" stroke-dasharray="6,4" stroke-linecap="round"/>
-              <!-- Farm nodes -->
-              <circle cx="80" cy="80" r="8" fill="#2d9e52" opacity=".9"/>
-              <circle cx="340" cy="55" r="6" fill="#2d9e52" opacity=".7"/>
-              <circle cx="30" cy="165" r="6" fill="#2d9e52" opacity=".7"/>
-              <!-- Nairobi hub -->
-              <circle cx="200" cy="100" r="14" fill="#1a6b35"/>
-              <text x="200" y="105" text-anchor="middle" fill="white" font-size="10" font-family="sans-serif" font-weight="bold">NBI</text>
-              <!-- Delivery nodes -->
-              <circle cx="290" cy="150" r="8" fill="#f5a623" opacity=".9"/>
-              <circle cx="140" cy="165" r="7" fill="#f5a623" opacity=".8"/>
+    <!-- DRAWER -->
+    <div
+      class="drawer"
+      id="drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Navigation menu"
+    >
+      <div class="drawer-head">
+        <a
+          href="#home"
+          class="logo"
+          style="font-size: 1.1rem"
+          onclick="closeDrawer()"
+        >
+          <div
+            class="logo-icon"
+            style="width: 28px; height: 28px"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="width: 14px; height: 14px"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
-            <div class="route-dot" style="top:37%;left:19%;"></div>
-            <div class="route-dot" style="top:68%;left:68%;animation-delay:.8s;"></div>
           </div>
+          Twiga Foods
+        </a>
+        <button class="drawer-close" id="drawerClose" aria-label="Close menu">
+          ✕
+        </button>
+      </div>
+      <nav class="drawer-nav" aria-label="Mobile navigation">
+        <a href="#how" class="drawer-link" onclick="closeDrawer()"
+          ><span class="dli">⚙️</span> How It Works</a
+        >
+        <a href="#products" class="drawer-link" onclick="closeDrawer()"
+          ><span class="dli">🥬</span> Products</a
+        >
+        <a href="#impact" class="drawer-link" onclick="closeDrawer()"
+          ><span class="dli">📊</span> Our Impact</a
+        >
+        <a href="#farmers" class="drawer-link" onclick="closeDrawer()"
+          ><span class="dli">👩‍🌾</span> For Farmers</a
+        >
+        <div class="drawer-divider"></div>
+        <a href="#" class="drawer-link" onclick="closeDrawer()"
+          ><span class="dli">📱</span> Download App</a
+        >
+        <a href="#" class="drawer-link" onclick="closeDrawer()"
+          ><span class="dli">💬</span> WhatsApp Support</a
+        >
+      </nav>
+      <a href="#cta" class="drawer-cta" onclick="closeDrawer()"
+        >🚀 &nbsp;Get Started Free</a
+      >
+    </div>
 
-          <div class="route-list">
-            <div class="route-item">
-              <div class="route-dot-sm" style="background:#2d9e52;"></div>
-              <span>Murang'a Farm Cluster</span>
-              <small>🌽 Maize, Kales</small>
-            </div>
-            <div class="route-item">
-              <div class="route-dot-sm" style="background:#f5a623;"></div>
-              <span>Nairobi CBD Retailers</span>
-              <small>📦 42 orders</small>
-            </div>
-            <div class="route-item">
-              <div class="route-dot-sm" style="background:#f5a623;"></div>
-              <span>Westlands Supermarket</span>
-              <small>🚛 ETA 2hrs</small>
-            </div>
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="dot" aria-hidden="true"></span> Kenya's Leading Agri-Tech
+          Platform
+        </div>
+        <h1>Fresh From <em>Farm</em> To Your Shelf — Reimagined</h1>
+        <p class="hero-sub">
+          Twiga connects 17,000+ smallholder farmers directly to urban
+          retailers, cutting costs by 25% and eliminating the middlemen holding
+          Kenya's food system back.
+        </p>
+        <div class="hero-actions">
+          <a href="#products" class="btn-primary">🛒 Browse Products</a>
+          <a href="#how" class="btn-secondary">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle
+                cx="8"
+                cy="8"
+                r="7"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M6 7l2 2 2-2"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            How it works
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <h3>17K+</h3>
+            <p>Farmers connected</p>
+          </div>
+          <div class="stat-item">
+            <h3>8K+</h3>
+            <p>Retail vendors</p>
+          </div>
+          <div class="stat-item">
+            <h3>25%</h3>
+            <p>Cost savings</p>
+          </div>
+          <div class="stat-item">
+            <h3>$30M</h3>
+            <p>Capital raised</p>
           </div>
         </div>
       </div>
 
-      <!-- Floating badge 2 -->
-      <div class="float-badge b2">
-        <span class="icon">💸</span>
-        <div class="text">
-          <span>M-Pesa Payment</span>
-          <small>KES 24,500 received</small>
+      <div class="hero-visual">
+        <div class="float-badge b1">
+          <span class="fi">🌿</span>
+          <div class="ft">
+            <span>Fresh Kales</span><small>Just harvested · Murang'a</small>
+          </div>
+        </div>
+        <div class="hero-map-card">
+          <div class="map-header">
+            <h4>🚛 Live Delivery Network</h4>
+            <span>Nairobi Region</span>
+          </div>
+          <div class="map-body">
+            <div class="map-svg-wrap">
+              <svg
+                viewBox="0 0 400 200"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <rect width="400" height="200" fill="#e8f5ec" />
+                <path
+                  d="M200,100 Q150,60 80,80 Q40,90 20,100"
+                  stroke="#c5e0cb"
+                  stroke-width="6"
+                  fill="none"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M200,100 Q220,70 280,60 Q340,50 380,40"
+                  stroke="#c5e0cb"
+                  stroke-width="6"
+                  fill="none"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M200,100 Q210,140 250,160 Q300,180 380,175"
+                  stroke="#c5e0cb"
+                  stroke-width="6"
+                  fill="none"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M200,100 Q180,140 140,165 Q80,185 20,170"
+                  stroke="#c5e0cb"
+                  stroke-width="6"
+                  fill="none"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M80,80 Q140,90 200,100"
+                  stroke="#1a6b35"
+                  stroke-width="3"
+                  fill="none"
+                  stroke-dasharray="6,4"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M200,100 Q240,130 290,150"
+                  stroke="#f5a623"
+                  stroke-width="3"
+                  fill="none"
+                  stroke-dasharray="6,4"
+                  stroke-linecap="round"
+                />
+                <circle cx="80" cy="80" r="8" fill="#2d9e52" opacity=".9" />
+                <circle cx="340" cy="55" r="6" fill="#2d9e52" opacity=".7" />
+                <circle cx="30" cy="165" r="6" fill="#2d9e52" opacity=".7" />
+                <circle cx="200" cy="100" r="14" fill="#1a6b35" />
+                <text
+                  x="200"
+                  y="105"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="10"
+                  font-family="sans-serif"
+                  font-weight="bold"
+                >
+                  NBI
+                </text>
+                <circle cx="290" cy="150" r="8" fill="#f5a623" opacity=".9" />
+                <circle cx="140" cy="165" r="7" fill="#f5a623" opacity=".8" />
+              </svg>
+              <div class="pulse-dot" style="top: 37%; left: 19%"></div>
+              <div
+                class="pulse-dot"
+                style="top: 70%; left: 68%; animation-delay: 0.9s"
+              ></div>
+            </div>
+            <div class="route-list">
+              <div class="route-item">
+                <div class="rdot" style="background: #2d9e52"></div>
+                <span>Murang'a Farm Cluster</span><small>🌽 Maize, Kales</small>
+              </div>
+              <div class="route-item">
+                <div class="rdot" style="background: #f5a623"></div>
+                <span>Nairobi CBD Retailers</span><small>📦 42 orders</small>
+              </div>
+              <div class="route-item">
+                <div class="rdot" style="background: #f5a623"></div>
+                <span>Westlands Supermarket</span><small>🚛 ETA 2hrs</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="float-badge b2">
+          <span class="fi">💸</span>
+          <div class="ft">
+            <span>M-Pesa Payment</span><small>KES 24,500 received</small>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- MARQUEE -->
-  <div class="marquee-section">
-    <div class="marquee-track" id="marquee">
-      <div class="marquee-item">Freshest Produce</div>
-      <div class="marquee-item">17,000+ Farmers</div>
-      <div class="marquee-item">Mobile Money Payments</div>
-      <div class="marquee-item">Same-Day Delivery</div>
-      <div class="marquee-item">Zero Middlemen</div>
-      <div class="marquee-item">Cold Chain Logistics</div>
-      <div class="marquee-item">Private Label Products</div>
-      <div class="marquee-item">8,000+ Retail Partners</div>
-      <div class="marquee-item">East Africa's #1 Platform</div>
-      <div class="marquee-item">Freshest Produce</div>
-      <div class="marquee-item">17,000+ Farmers</div>
-      <div class="marquee-item">Mobile Money Payments</div>
-      <div class="marquee-item">Same-Day Delivery</div>
-      <div class="marquee-item">Zero Middlemen</div>
-      <div class="marquee-item">Cold Chain Logistics</div>
-      <div class="marquee-item">Private Label Products</div>
-      <div class="marquee-item">8,000+ Retail Partners</div>
-      <div class="marquee-item">East Africa's #1 Platform</div>
-    </div>
-  </div>
-
-  <!-- HOW IT WORKS -->
-  <section class="how-section" id="how">
-    <div class="section-eyebrow">The Twiga Process</div>
-    <h2 class="section-title" style="color:white;">From soil to sale in<br>three simple steps</h2>
-    <p class="section-sub">Our technology removes friction at every point in Kenya's food supply chain.</p>
-
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-num green" style="font-size:1.8rem;">🌱</div>
-        <h3>Farmers List Produce</h3>
-        <p>Smallholder farmers across Kenya list their available harvest via SMS or our mobile app. They set schedules, quantities, and pricing — without leaving their farms.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num amber" style="font-size:1.8rem;">🚛</div>
-        <h3>Twiga Collects & QA</h3>
-        <p>Our agents collect directly from farms, perform quality checks, and route produce through our cold-chain logistics network to our Nairobi distribution hub.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num mixed" style="font-size:1.8rem;">🏪</div>
-        <h3>Retailers Receive Orders</h3>
-        <p>Urban vendors and supermarkets order via our platform and receive doorstep delivery. Payment is seamless via M-Pesa. Both sides win — no middleman tax.</p>
+    <!-- MARQUEE -->
+    <div class="marquee-bar" aria-hidden="true">
+      <div class="marquee-track">
+        <div class="mi">Freshest Produce</div>
+        <div class="mi">17,000+ Farmers</div>
+        <div class="mi">Mobile Money Payments</div>
+        <div class="mi">Same-Day Delivery</div>
+        <div class="mi">Zero Middlemen</div>
+        <div class="mi">Cold Chain Logistics</div>
+        <div class="mi">Private Label Products</div>
+        <div class="mi">8,000+ Retail Partners</div>
+        <div class="mi">East Africa's #1 Platform</div>
+        <div class="mi">Freshest Produce</div>
+        <div class="mi">17,000+ Farmers</div>
+        <div class="mi">Mobile Money Payments</div>
+        <div class="mi">Same-Day Delivery</div>
+        <div class="mi">Zero Middlemen</div>
+        <div class="mi">Cold Chain Logistics</div>
+        <div class="mi">Private Label Products</div>
+        <div class="mi">8,000+ Retail Partners</div>
+        <div class="mi">East Africa's #1 Platform</div>
       </div>
     </div>
-  </section>
 
-  <!-- PRODUCTS -->
-  <section class="products-section" id="products">
-    <div class="products-header">
-      <div>
-        <div class="section-eyebrow">Catalogue</div>
-        <h2 class="section-title">Order Fresh Produce<br>Direct From Farms</h2>
+    <!-- HOW IT WORKS -->
+    <section class="how-sec" id="how">
+      <div class="eyebrow">The Twiga Process</div>
+      <h2 class="sec-title" style="color: #fff">
+        From soil to sale in<br />three simple steps
+      </h2>
+      <p class="sec-sub">
+        Our technology removes friction at every point in Kenya's food supply
+        chain.
+      </p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-icon g" aria-hidden="true">🌱</div>
+          <h3>Farmers List Produce</h3>
+          <p>
+            Smallholder farmers across Kenya list their harvest via SMS or our
+            mobile app — schedules, quantities, pricing — all without leaving
+            their farms.
+          </p>
+        </div>
+        <div class="step-connector" aria-hidden="true"></div>
+        <div class="step-card">
+          <div class="step-icon a" aria-hidden="true">🚛</div>
+          <h3>Twiga Collects & QA</h3>
+          <p>
+            Our agents collect directly, run quality checks, and route produce
+            through cold-chain logistics to our Nairobi distribution hub.
+          </p>
+        </div>
+        <div class="step-connector" aria-hidden="true"></div>
+        <div class="step-card">
+          <div class="step-icon m" aria-hidden="true">🏪</div>
+          <h3>Retailers Receive Orders</h3>
+          <p>
+            Urban vendors order via the platform and get doorstep delivery.
+            M-Pesa payment is instant. Both sides win — zero middleman tax.
+          </p>
+        </div>
       </div>
-      <div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="products-sec" id="products">
+      <div class="eyebrow">Catalogue</div>
+      <h2 class="sec-title">Order Fresh Produce<br />Direct From Farms</h2>
+      <div class="filter-wrap" role="tablist" aria-label="Product categories">
         <div class="filter-tabs">
-          <button class="filter-tab active" onclick="filterProducts('all', this)">All</button>
-          <button class="filter-tab" onclick="filterProducts('veg', this)">Vegetables</button>
-          <button class="filter-tab" onclick="filterProducts('fruit', this)">Fruits</button>
-          <button class="filter-tab" onclick="filterProducts('grain', this)">Grains</button>
-          <button class="filter-tab" onclick="filterProducts('private', this)">Private Label</button>
+          <button
+            class="filter-tab active"
+            onclick="filterProducts('all', this)"
+            role="tab"
+            aria-selected="true"
+          >
+            All
+          </button>
+          <button
+            class="filter-tab"
+            onclick="filterProducts('veg', this)"
+            role="tab"
+            aria-selected="false"
+          >
+            Vegetables
+          </button>
+          <button
+            class="filter-tab"
+            onclick="filterProducts('fruit', this)"
+            role="tab"
+            aria-selected="false"
+          >
+            Fruits
+          </button>
+          <button
+            class="filter-tab"
+            onclick="filterProducts('grain', this)"
+            role="tab"
+            aria-selected="false"
+          >
+            Grains
+          </button>
+          <button
+            class="filter-tab"
+            onclick="filterProducts('private', this)"
+            role="tab"
+            aria-selected="false"
+          >
+            Private Label
+          </button>
         </div>
       </div>
-    </div>
+      <div
+        class="products-grid"
+        id="products-grid"
+        role="list"
+        aria-label="Products"
+      ></div>
+    </section>
 
-    <div class="products-grid" id="products-grid">
-      <!-- Products injected by JS -->
-    </div>
-  </section>
-
-  <!-- IMPACT -->
-  <section class="impact-section" id="impact">
-    <div class="section-eyebrow">Our Impact</div>
-    <h2 class="section-title">Numbers that matter<br>for East Africa</h2>
-    <p class="section-sub">We're not just a logistics company — we're rebuilding the food economy from the ground up.</p>
-
-    <div class="impact-grid">
-      <div class="impact-card">
-        <div class="impact-icon">👩‍🌾</div>
-        <div class="impact-number">17<span>K+</span></div>
-        <div class="impact-label">Smallholder farmers earning fair prices directly</div>
-      </div>
-      <div class="impact-card">
-        <div class="impact-icon">🏪</div>
-        <div class="impact-number">8<span>K+</span></div>
-        <div class="impact-label">Urban vendors and supermarkets served in Nairobi</div>
-      </div>
-      <div class="impact-card">
-        <div class="impact-icon">📉</div>
-        <div class="impact-number">25<span>%</span></div>
-        <div class="impact-label">Reduction in food costs for urban retailers</div>
-      </div>
-      <div class="impact-card">
-        <div class="impact-icon">💰</div>
-        <div class="impact-number">$30<span>M</span></div>
-        <div class="impact-label">Capital raised to scale operations across East Africa</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testi-section" id="farmers">
-    <div class="section-eyebrow">Voices From The Field</div>
-    <h2 class="section-title">What farmers &amp; retailers<br>say about Twiga</h2>
-    <div class="testi-grid">
-      <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Before Twiga, I had to travel to Nairobi twice a week to sell my tomatoes. Now buyers come to me. I receive M-Pesa on the same day. My income has doubled."</p>
-        <div class="testi-author">
-          <div class="testi-avatar" style="background:#d4ead9;">🧑🏾‍🌾</div>
-          <div>
-            <h5>James Mwangi</h5>
-            <p>Tomato Farmer · Murang'a County</p>
+    <!-- IMPACT -->
+    <section class="impact-sec" id="impact">
+      <div class="eyebrow">Our Impact</div>
+      <h2 class="sec-title">Numbers that matter<br />for East Africa</h2>
+      <p class="sec-sub">
+        We're not just logistics — we're rebuilding the food economy from the
+        ground up.
+      </p>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="imp-icon">👩‍🌾</div>
+          <div class="imp-num" data-target="17" data-prefix="" data-suffix="K+">
+            17<span>K+</span>
+          </div>
+          <div class="imp-label">
+            Smallholder farmers earning fair prices directly
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="imp-icon">🏪</div>
+          <div class="imp-num" data-target="8" data-prefix="" data-suffix="K+">
+            8<span>K+</span>
+          </div>
+          <div class="imp-label">
+            Urban vendors and supermarkets served in Nairobi
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="imp-icon">📉</div>
+          <div class="imp-num" data-target="25" data-prefix="" data-suffix="%">
+            25<span>%</span>
+          </div>
+          <div class="imp-label">
+            Reduction in food costs for urban retailers
+          </div>
+        </div>
+        <div class="impact-card">
+          <div class="imp-icon">💰</div>
+          <div class="imp-num" data-target="30" data-prefix="$" data-suffix="M">
+            $30<span>M</span>
+          </div>
+          <div class="imp-label">
+            Capital raised to scale across East Africa
           </div>
         </div>
       </div>
-      <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"My duka gets fresher vegetables at a better price than any market. I order on Monday night and they arrive Tuesday morning. No spoilage, no haggling. It just works."</p>
-        <div class="testi-author">
-          <div class="testi-avatar" style="background:#fef3c7;">👩🏾</div>
-          <div>
-            <h5>Grace Atieno</h5>
-            <p>Retail Vendor · Westlands, Nairobi</p>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"We procure over 60% of our fresh produce through Twiga. Consistency, traceability, and competitive pricing make them our most reliable supplier in the market."</p>
-        <div class="testi-author">
-          <div class="testi-avatar" style="background:#e0e7ff;">👨🏾‍💼</div>
-          <div>
-            <h5>David Karanja</h5>
-            <p>Procurement Manager · Naivas Supermarkets</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- CTA -->
-  <section class="cta-section" id="cta">
-    <div class="cta-inner">
-      <div class="section-eyebrow">Join Twiga Today</div>
-      <h2 class="section-title">Ready to transform your food business?</h2>
-      <p class="section-sub" style="margin: 0 auto 2rem;">Whether you're a farmer looking for fair prices or a retailer seeking fresh produce — Twiga connects you directly.</p>
-      <div class="cta-form">
-        <input type="tel" placeholder="Enter your phone number (M-Pesa)">
-        <button class="btn-primary" style="white-space:nowrap;" onclick="showToastMsg('🎉 We\'ll call you within 24 hours!')">Get Started Free</button>
-      </div>
-      <p style="font-size:.8rem;color:var(--gray);margin-top:.75rem;">No registration fee. M-Pesa supported. Start in 24 hours.</p>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <h3>🌿 Twiga Foods</h3>
-        <p>Kenya's leading B2B food distribution platform, connecting smallholder farmers directly to urban retailers since 2014.</p>
-        <div class="footer-socials" style="margin-top:1.5rem;">
-          <a href="#" class="social-btn">𝕏</a>
-          <a href="#" class="social-btn">in</a>
-          <a href="#" class="social-btn">📘</a>
-          <a href="#" class="social-btn">📷</a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Platform</h4>
-        <ul>
-          <li><a href="#">For Farmers</a></li>
-          <li><a href="#">For Retailers</a></li>
-          <li><a href="#">Private Label</a></li>
-          <li><a href="#">Mobile App</a></li>
-          <li><a href="#">API Access</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <ul>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Impact Report</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Press</a></li>
-          <li><a href="#">Blog</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Support</h4>
-        <ul>
-          <li><a href="#">Help Centre</a></li>
-          <li><a href="#">Contact Us</a></li>
-          <li><a href="#">WhatsApp: 0700 123 456</a></li>
-          <li><a href="#">Terms of Service</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2024 Twiga Foods Limited. Nairobi, Kenya.</span>
-      <a href="#">Back to top ↑</a>
-    </div>
-  </footer>
-
-  <!-- TOAST -->
-  <div class="toast" id="toast">
-    <span>✅</span>
-    <span id="toast-msg">Added to cart!</span>
-  </div>
-
-  <script>
-    // ── DATA ──
-    const products = [
-      { id:1, name:"Sukuma Wiki (Kales)", origin:"Murang'a County", price:"KES 45", unit:"/bunch", emoji:"🥬", bg:"#e8f5ec", category:"veg", badge:"Bestseller", badgeType:"amber" },
-      { id:2, name:"Tomatoes Grade A", origin:"Kirinyaga County", price:"KES 120", unit:"/kg", emoji:"🍅", bg:"#fef3c7", category:"veg", badge:"Organic", badgeType:"green" },
-      { id:3, name:"Banana Fingers", origin:"Meru County", price:"KES 80", unit:"/dozen", emoji:"🍌", bg:"#fffbeb", category:"fruit", badge:"Fresh", badgeType:"green" },
-      { id:4, name:"White Maize", origin:"Trans-Nzoia", price:"KES 55", unit:"/kg", emoji:"🌽", bg:"#fef9ec", category:"grain", badge:"Bulk", badgeType:"amber" },
-      { id:5, name:"Avocado Hass", origin:"Murang'a County", price:"KES 35", unit:"/piece", emoji:"🥑", bg:"#d4ead9", category:"fruit", badge:"Premium", badgeType:"green" },
-      { id:6, name:"Twiga Own: Flour 2kg", origin:"Private Label", price:"KES 195", unit:"/bag", emoji:"🌾", bg:"#f0e6d3", category:"private", badge:"Our Brand", badgeType:"amber" },
-      { id:7, name:"Red Onions", origin:"Kajiado County", price:"KES 95", unit:"/kg", emoji:"🧅", bg:"#fce7e0", category:"veg", badge:null },
-      { id:8, name:"Pineapple", origin:"Coast Region", price:"KES 150", unit:"/piece", emoji:"🍍", bg:"#fff8e1", category:"fruit", badge:"Seasonal", badgeType:"amber" },
-    ];
-
-    let activeFilter = 'all';
-    let cartCount = 0;
-
-    function renderProducts(filter) {
-      const grid = document.getElementById('products-grid');
-      const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
-      grid.innerHTML = filtered.map(p => `
-        <div class="product-card" style="opacity:0;transform:translateY(20px);transition:all .4s ease ${filtered.indexOf(p) * 0.07}s">
-          <div class="product-img" style="background:${p.bg};">
-            <span style="filter:drop-shadow(0 4px 8px rgba(0,0,0,.15))">${p.emoji}</span>
-            ${p.badge ? `<span class="product-badge ${p.badgeType === 'green' ? 'green' : ''}">${p.badge}</span>` : ''}
-          </div>
-          <div class="product-info">
-            <h4>${p.name}</h4>
-            <div class="origin">📍 ${p.origin}</div>
-            <div class="product-footer">
-              <div class="product-price">${p.price}<span>${p.unit}</span></div>
-              <button class="add-btn" onclick="addToCart('${p.name}')">+</button>
+    <!-- TESTIMONIALS -->
+    <section class="testi-sec" id="farmers">
+      <div class="eyebrow">Voices From The Field</div>
+      <h2 class="sec-title">
+        What farmers &amp; retailers<br />say about Twiga
+      </h2>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="t-stars" aria-label="5 stars">★★★★★</div>
+          <p class="t-text">
+            "Before Twiga, I travelled to Nairobi twice a week to sell my
+            tomatoes. Now buyers come to me — I receive M-Pesa the same day. My
+            income has doubled."
+          </p>
+          <div class="t-author">
+            <div class="t-avatar" style="background: #d4ead9">🧑🏾‍🌾</div>
+            <div>
+              <h5>James Mwangi</h5>
+              <p>Tomato Farmer · Murang'a County</p>
             </div>
           </div>
         </div>
-      `).join('');
+        <div class="testi-card">
+          <div class="t-stars" aria-label="5 stars">★★★★★</div>
+          <p class="t-text">
+            "My duka gets fresher vegetables at a better price than any market.
+            I order Monday night, they arrive Tuesday morning. No spoilage, no
+            haggling."
+          </p>
+          <div class="t-author">
+            <div class="t-avatar" style="background: #fef3c7">👩🏾</div>
+            <div>
+              <h5>Grace Atieno</h5>
+              <p>Retail Vendor · Westlands, Nairobi</p>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="t-stars" aria-label="5 stars">★★★★★</div>
+          <p class="t-text">
+            "We source over 60% of our fresh produce through Twiga. Consistency,
+            traceability, and competitive pricing make them our most reliable
+            supplier."
+          </p>
+          <div class="t-author">
+            <div class="t-avatar" style="background: #e0e7ff">👨🏾‍💼</div>
+            <div>
+              <h5>David Karanja</h5>
+              <p>Procurement Manager · Naivas Supermarkets</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      // Animate in
-      requestAnimationFrame(() => {
-        grid.querySelectorAll('.product-card').forEach(card => {
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
+    <!-- CTA -->
+    <section class="cta-sec" id="cta">
+      <div class="cta-inner">
+        <div class="eyebrow" style="display: block">Join Twiga Today</div>
+        <h2 class="sec-title">Ready to transform<br />your food business?</h2>
+        <p class="sec-sub" style="margin: 0 auto 1.75rem">
+          Whether you're a farmer or a retailer — Twiga connects you directly.
+        </p>
+        <div class="cta-form">
+          <input
+            type="tel"
+            placeholder="Your M-Pesa number"
+            aria-label="Phone number"
+          />
+          <button
+            class="btn-primary"
+            onclick="showToastMsg('🎉 We\'ll call you within 24 hours!')"
+          >
+            Get Started
+          </button>
+        </div>
+        <p style="font-size: 0.76rem; color: var(--gray); margin-top: 0.65rem">
+          No fee &nbsp;·&nbsp; M-Pesa supported &nbsp;·&nbsp; Start in 24 hrs
+        </p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>🌿 Twiga Foods</h3>
+          <p>
+            Kenya's leading B2B food distribution platform, connecting
+            smallholder farmers directly to urban retailers since 2014.
+          </p>
+          <div class="footer-socials">
+            <a href="#" class="soc-btn" aria-label="X (Twitter)">𝕏</a>
+            <a href="#" class="soc-btn" aria-label="LinkedIn">in</a>
+            <a href="#" class="soc-btn" aria-label="Facebook">📘</a>
+            <a href="#" class="soc-btn" aria-label="Instagram">📷</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="#">For Farmers</a></li>
+            <li><a href="#">For Retailers</a></li>
+            <li><a href="#">Private Label</a></li>
+            <li><a href="#">Mobile App</a></li>
+            <li><a href="#">API Access</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Impact Report</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Centre</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">WhatsApp Us</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 Twiga Foods Limited · Nairobi, Kenya</span>
+        <a href="#home">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <!-- BOTTOM MOBILE NAV -->
+    <nav class="bottom-nav" aria-label="Quick navigation">
+      <div class="bottom-nav-inner">
+        <a href="#home" class="bn-item active" id="bn0" onclick="setBn(0)"
+          ><span class="bn-icon">🏠</span>Home
+          <div class="bn-dot"></div
+        ></a>
+        <a href="#products" class="bn-item" id="bn1" onclick="setBn(1)"
+          ><span class="bn-icon">🥬</span>Products
+          <div class="bn-dot"></div
+        ></a>
+        <a href="#cta" class="bn-cta-wrap" aria-label="Get started">
+          <div class="bn-cta-btn">🚀</div>
+          <span class="bn-cta-lbl">Start</span>
+        </a>
+        <a href="#impact" class="bn-item" id="bn3" onclick="setBn(3)"
+          ><span class="bn-icon">📊</span>Impact
+          <div class="bn-dot"></div
+        ></a>
+        <a href="#farmers" class="bn-item" id="bn4" onclick="setBn(4)"
+          ><span class="bn-icon">👩‍🌾</span>Farmers
+          <div class="bn-dot"></div
+        ></a>
+      </div>
+    </nav>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <span aria-hidden="true">✅</span>
+      <span id="toast-msg">Added to cart!</span>
+    </div>
+
+    <script>
+      /* PRODUCTS */
+      const products = [
+        {
+          id: 1,
+          name: "Sukuma Wiki (Kales)",
+          origin: "Murang'a County",
+          price: "KES 45",
+          unit: "/bunch",
+          emoji: "🥬",
+          bg: "#e8f5ec",
+          cat: "veg",
+          badge: "Bestseller",
+          bt: "amber",
+        },
+        {
+          id: 2,
+          name: "Tomatoes Grade A",
+          origin: "Kirinyaga County",
+          price: "KES 120",
+          unit: "/kg",
+          emoji: "🍅",
+          bg: "#fef3c7",
+          cat: "veg",
+          badge: "Organic",
+          bt: "green",
+        },
+        {
+          id: 3,
+          name: "Banana Fingers",
+          origin: "Meru County",
+          price: "KES 80",
+          unit: "/dozen",
+          emoji: "🍌",
+          bg: "#fffbeb",
+          cat: "fruit",
+          badge: "Fresh",
+          bt: "green",
+        },
+        {
+          id: 4,
+          name: "White Maize",
+          origin: "Trans-Nzoia",
+          price: "KES 55",
+          unit: "/kg",
+          emoji: "🌽",
+          bg: "#fef9ec",
+          cat: "grain",
+          badge: "Bulk",
+          bt: "amber",
+        },
+        {
+          id: 5,
+          name: "Avocado Hass",
+          origin: "Murang'a County",
+          price: "KES 35",
+          unit: "/piece",
+          emoji: "🥑",
+          bg: "#d4ead9",
+          cat: "fruit",
+          badge: "Premium",
+          bt: "green",
+        },
+        {
+          id: 6,
+          name: "Twiga Flour 2kg",
+          origin: "Private Label",
+          price: "KES 195",
+          unit: "/bag",
+          emoji: "🌾",
+          bg: "#f0e6d3",
+          cat: "private",
+          badge: "Our Brand",
+          bt: "amber",
+        },
+        {
+          id: 7,
+          name: "Red Onions",
+          origin: "Kajiado County",
+          price: "KES 95",
+          unit: "/kg",
+          emoji: "🧅",
+          bg: "#fce7e0",
+          cat: "veg",
+          badge: null,
+        },
+        {
+          id: 8,
+          name: "Pineapple",
+          origin: "Coast Region",
+          price: "KES 150",
+          unit: "/piece",
+          emoji: "🍍",
+          bg: "#fff8e1",
+          cat: "fruit",
+          badge: "Seasonal",
+          bt: "amber",
+        },
+      ];
+      let cartCount = 0;
+
+      function renderProducts(filter) {
+        const grid = document.getElementById("products-grid");
+        const list =
+          filter === "all"
+            ? products
+            : products.filter((p) => p.cat === filter);
+        grid.innerHTML = list
+          .map(
+            (p, i) => `
+      <div class="product-card" role="listitem" style="opacity:0;transform:translateY(16px);transition:opacity .32s ease ${i * 0.06}s,transform .32s ease ${i * 0.06}s">
+        <div class="prod-img" style="background:${p.bg}">
+          <span style="filter:drop-shadow(0 3px 6px rgba(0,0,0,.14))">${p.emoji}</span>
+          ${p.badge ? `<span class="prod-badge ${p.bt === "green" ? "g" : ""}">${p.badge}</span>` : ""}
+        </div>
+        <div class="prod-info">
+          <h4>${p.name}</h4>
+          <div class="prod-origin">📍 ${p.origin}</div>
+          <div class="prod-foot">
+            <div class="prod-price">${p.price}<span>${p.unit}</span></div>
+            <button class="add-btn" onclick="addToCart('${p.name.replace(/'/g, "\\'")}')" aria-label="Add ${p.name} to cart">+</button>
+          </div>
+        </div>
+      </div>`,
+          )
+          .join("");
+        requestAnimationFrame(() => {
+          grid.querySelectorAll(".product-card").forEach((c) => {
+            c.style.opacity = "1";
+            c.style.transform = "translateY(0)";
+          });
         });
+      }
+
+      function filterProducts(cat, btn) {
+        document.querySelectorAll(".filter-tab").forEach((t) => {
+          t.classList.remove("active");
+          t.setAttribute("aria-selected", "false");
+        });
+        btn.classList.add("active");
+        btn.setAttribute("aria-selected", "true");
+        renderProducts(cat);
+      }
+
+      function addToCart(name) {
+        cartCount++;
+        showToastMsg(
+          `🛒 ${name} added (${cartCount} item${cartCount > 1 ? "s" : ""})`,
+        );
+      }
+
+      function showToastMsg(msg) {
+        const t = document.getElementById("toast");
+        document.getElementById("toast-msg").textContent = msg;
+        t.classList.add("show");
+        clearTimeout(t._t);
+        t._t = setTimeout(() => t.classList.remove("show"), 3000);
+      }
+
+      /* HAMBURGER / DRAWER */
+      const hamburger = document.getElementById("hamburger");
+      const drawer = document.getElementById("drawer");
+      const overlay = document.getElementById("drawerOverlay");
+
+      function openDrawer() {
+        hamburger.classList.add("open");
+        hamburger.setAttribute("aria-expanded", "true");
+        drawer.classList.add("open");
+        overlay.classList.add("open");
+        overlay.removeAttribute("aria-hidden");
+        document.body.style.overflow = "hidden";
+        document.getElementById("drawerClose").focus();
+      }
+      function closeDrawer() {
+        hamburger.classList.remove("open");
+        hamburger.setAttribute("aria-expanded", "false");
+        drawer.classList.remove("open");
+        overlay.classList.remove("open");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        hamburger.focus();
+      }
+      hamburger.addEventListener("click", () =>
+        drawer.classList.contains("open") ? closeDrawer() : openDrawer(),
+      );
+      document
+        .getElementById("drawerClose")
+        .addEventListener("click", closeDrawer);
+      overlay.addEventListener("click", closeDrawer);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && drawer.classList.contains("open"))
+          closeDrawer();
       });
-    }
 
-    function filterProducts(cat, btn) {
-      activeFilter = cat;
-      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-      btn.classList.add('active');
-      renderProducts(cat);
-    }
+      /* SCROLL NAV */
+      window.addEventListener(
+        "scroll",
+        () => {
+          document
+            .getElementById("navbar")
+            .classList.toggle("scrolled", window.scrollY > 60);
+        },
+        { passive: true },
+      );
 
-    function addToCart(name) {
-      cartCount++;
-      showToastMsg(`🛒 ${name} added to cart (${cartCount} item${cartCount > 1 ? 's' : ''})`);
-    }
+      /* BOTTOM NAV ACTIVE */
+      const bnIds = [0, 1, 3, 4];
+      const bnSecs = ["home", "products", "impact", "farmers"];
+      function setBn(idx) {
+        bnIds.forEach((i) =>
+          document.getElementById("bn" + i)?.classList.remove("active"),
+        );
+        document.getElementById("bn" + idx)?.classList.add("active");
+      }
+      window.addEventListener(
+        "scroll",
+        () => {
+          let cur = 0;
+          bnSecs.forEach((id, i) => {
+            const el = document.getElementById(id);
+            if (el && window.scrollY >= el.offsetTop - 130) cur = i;
+          });
+          bnIds.forEach((i) =>
+            document.getElementById("bn" + i)?.classList.remove("active"),
+          );
+          document.getElementById("bn" + bnIds[cur])?.classList.add("active");
+        },
+        { passive: true },
+      );
 
-    function showToastMsg(msg) {
-      const toast = document.getElementById('toast');
-      document.getElementById('toast-msg').textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
-    }
+      /* IMPACT COUNTERS */
+      let counted = false;
+      function animateCounters() {
+        if (counted) return;
+        counted = true;
+        document.querySelectorAll(".imp-num").forEach((el) => {
+          const target = parseFloat(el.dataset.target),
+            prefix = el.dataset.prefix || "",
+            suffix = el.dataset.suffix || "";
+          const dur = 1500;
+          let start = null;
+          const step = (ts) => {
+            if (!start) start = ts;
+            const p = Math.min((ts - start) / dur, 1),
+              ease = 1 - Math.pow(1 - p, 3);
+            el.innerHTML = `${prefix}${Math.floor(ease * target)}<span>${suffix}</span>`;
+            if (p < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        });
+      }
+      new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) animateCounters();
+          });
+        },
+        { threshold: 0.25 },
+      ).observe(document.querySelector(".impact-sec"));
 
-    // ── SCROLL NAV ──
-    window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
-    });
-
-    // ── COUNTER ANIMATION ──
-    function animateCounters() {
-      document.querySelectorAll('.impact-number').forEach(el => {
-        const target = parseFloat(el.dataset.target);
-        const prefix = el.dataset.prefix || '';
-        const suffix = el.querySelector('span') ? el.querySelector('span').textContent : '';
-        let start = 0;
-        const duration = 1500;
-        const step = (timestamp) => {
-          if (!start) start = timestamp;
-          const progress = Math.min((timestamp - start) / duration, 1);
-          const ease = 1 - Math.pow(1 - progress, 3);
-          const val = Math.floor(ease * target);
-          el.innerHTML = `${prefix}${val}<span>${suffix}</span>`;
-          if (progress < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      });
-    }
-
-    // Set counter targets
-    const impactData = [17, 8, 25, 30];
-    const prefixes = ['', '', '', '$'];
-    const suffixes = ['K+', 'K+', '%', 'M'];
-    document.querySelectorAll('.impact-number').forEach((el, i) => {
-      el.dataset.target = impactData[i];
-      el.dataset.prefix = prefixes[i];
-    });
-
-    // Intersection observer for counters
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { animateCounters(); observer.disconnect(); } });
-    }, { threshold: .3 });
-    const impactSection = document.querySelector('.impact-section');
-    if (impactSection) observer.observe(impactSection);
-
-    // ── INIT ──
-    renderProducts('all');
-  </script>
-</body>
+      /* INIT */
+      renderProducts("all");
+    </script>
+  </body>
 </html>
