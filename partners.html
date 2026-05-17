@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Partners — JijiMove</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --green: #1a6b35;
+        --green-light: #2d9e52;
+        --green-pale: #e8f5ec;
+        --amber: #f5a623;
+        --cream: #faf7f2;
+        --gray: #6b7280;
+        --dark: #111814;
+        --nav-h: 64px;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--cream);
+        color: var(--dark);
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Syne", sans-serif;
+      }
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        height: var(--nav-h);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2.5rem;
+        background: rgba(250, 247, 242, 0.92);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(26, 107, 53, 0.1);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-family: "Syne", sans-serif;
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--green);
+        text-decoration: none;
+      }
+      .logo-icon {
+        width: 34px;
+        height: 34px;
+        background: var(--green);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .logo-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2.2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-family: "Syne", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--dark);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--green);
+      }
+      main {
+        padding-top: var(--nav-h);
+        min-height: 100vh;
+      }
+      section {
+        padding: 4rem 2.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      section h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        color: var(--green);
+      }
+      section p {
+        font-size: 1rem;
+        line-height: 1.75;
+        color: var(--gray);
+        margin-bottom: 1.25rem;
+        max-width: 750px;
+      }
+      section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+      }
+      ul {
+        margin-left: 1.5rem;
+        line-height: 1.8;
+      }
+      li {
+        margin-bottom: 0.75rem;
+      }
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--green);
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        transition: gap 0.2s;
+      }
+      .back-link:hover {
+        gap: 0.8rem;
+      }
+      .partner-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+      .partner-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 1.75rem;
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+      }
+      .partner-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+      }
+      .partner-card p {
+        font-size: 0.9rem;
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2.5"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </div>
+        JijiMove
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#products">Marketplace</a></li>
+        <li><a href="safety.html">Safety</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="ethics.html">Ethics & Security</a></li>
+        <li><a href="about.html">About</a></li>
+        <li>
+          <a
+            href="index.html#cta"
+            class="nav-cta"
+            style="
+              background: var(--green);
+              color: #fff;
+              padding: 0.5rem 1.2rem;
+              border-radius: 8px;
+            "
+            >Get Started</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <main>
+      <section>
+        <a href="index.html" class="back-link">← Back to Home</a>
+
+        <h1>🤝 Our Partners</h1>
+        <p>
+          JijiMove is proud to work with leading organizations across Kenya's
+          agricultural and retail sectors. Our partnerships enable us to deliver
+          fresh produce efficiently while supporting smallholder farmers.
+        </p>
+
+        <h2>Strategic Partners</h2>
+        <div class="partner-grid">
+          <div class="partner-card">
+            <h3>Naivas Supermarkets</h3>
+            <p>
+              Kenya's leading supermarket chain, providing fresh JijiMove
+              produce to stores across East Africa.
+            </p>
+          </div>
+          <div class="partner-card">
+            <h3>Farmers Union Cooperative</h3>
+            <p>
+              Supporting over 5,000 smallholder farmers with training, inputs,
+              and direct market access.
+            </p>
+          </div>
+          <div class="partner-card">
+            <h3>Kenya Agricultural Research Institute (KARI)</h3>
+            <p>
+              Collaborating on sustainable farming practices and crop
+              improvement research.
+            </p>
+          </div>
+          <div class="partner-card">
+            <h3>Twiga Foods</h3>
+            <p>
+              Complementary B2B food platform partnership for cross-regional
+              expansion.
+            </p>
+          </div>
+          <div class="partner-card">
+            <h3>Kenya Red Cross</h3>
+            <p>
+              Food security initiatives supporting vulnerable communities with
+              fresh produce programs.
+            </p>
+          </div>
+          <div class="partner-card">
+            <h3>African Development Bank</h3>
+            <p>
+              Funding and technical support for agricultural transformation and
+              supply chain innovation.
+            </p>
+          </div>
+        </div>
+
+        <h2>Become a Partner</h2>
+        <p>
+          Are you a farm cooperative, retailer, or logistics provider? We're
+          always looking to expand our network.
+        </p>
+        <ul>
+          <li>
+            Retailers: Access competitive wholesale pricing with guaranteed
+            freshness
+          </li>
+          <li>Farmers: Sell directly to bulk buyers without middlemen</li>
+          <li>
+            Logistics: Join our distribution network and earn stable income
+          </li>
+        </ul>
+        <p style="margin-top: 2rem">
+          <strong>Interested?</strong> Email us at partnerships@jijimove.ke or
+          call +254 (0)723 456 7890
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

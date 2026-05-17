@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ethics & Security — JijiMove</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --green: #1a6b35;
+        --green-light: #2d9e52;
+        --green-pale: #e8f5ec;
+        --amber: #f5a623;
+        --cream: #faf7f2;
+        --gray: #6b7280;
+        --dark: #111814;
+        --nav-h: 64px;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--cream);
+        color: var(--dark);
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Syne", sans-serif;
+      }
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        height: var(--nav-h);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2.5rem;
+        background: rgba(250, 247, 242, 0.92);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(26, 107, 53, 0.1);
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-family: "Syne", sans-serif;
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--green);
+        text-decoration: none;
+      }
+      .logo-icon {
+        width: 34px;
+        height: 34px;
+        background: var(--green);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .logo-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2.2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-family: "Syne", sans-serif;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--dark);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--green);
+      }
+      main {
+        padding-top: var(--nav-h);
+        min-height: 100vh;
+      }
+      section {
+        padding: 4rem 2.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      section h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        color: var(--green);
+      }
+      section p {
+        font-size: 1rem;
+        line-height: 1.75;
+        color: var(--gray);
+        margin-bottom: 1.25rem;
+        max-width: 750px;
+      }
+      section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+      }
+      ul {
+        margin-left: 1.5rem;
+        line-height: 1.8;
+      }
+      li {
+        margin-bottom: 0.75rem;
+      }
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--green);
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        transition: gap 0.2s;
+      }
+      .back-link:hover {
+        gap: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2.5"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </div>
+        JijiMove
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#products">Marketplace</a></li>
+        <li><a href="safety.html">Safety</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="ethics.html">Ethics & Security</a></li>
+        <li><a href="about.html">About</a></li>
+        <li>
+          <a
+            href="index.html#cta"
+            class="nav-cta"
+            style="
+              background: var(--green);
+              color: #fff;
+              padding: 0.5rem 1.2rem;
+              border-radius: 8px;
+            "
+            >Get Started</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <main>
+      <section>
+        <a href="index.html" class="back-link">← Back to Home</a>
+
+        <h1>🔒 Ethics & Security</h1>
+        <p>
+          JijiMove is built on principles of transparency, fairness, and data
+          security. We believe in ethical business practices that benefit all
+          stakeholders in the agricultural supply chain.
+        </p>
+
+        <h2>Our Ethical Commitments</h2>
+        <p>
+          <strong>Fair Pricing:</strong> We guarantee farmers receive at least
+          85% of the retail price, eliminating exploitative middleman markups.
+        </p>
+        <p>
+          <strong>Living Wages:</strong> All JijiMove employees, including
+          logistics partners, earn above Kenya's living wage standard.
+        </p>
+        <p>
+          <strong>Transparency:</strong> Every transaction is recorded and
+          visible to both buyer and seller. No hidden fees.
+        </p>
+        <p>
+          <strong>Environmental Stewardship:</strong> We incentivize sustainable
+          farming practices and offset our carbon footprint through
+          tree-planting initiatives.
+        </p>
+
+        <h2>Data Security & Privacy</h2>
+        <ul>
+          <li>256-bit encryption for all transactions and personal data</li>
+          <li>Compliance with Kenya's Data Protection Act 2019</li>
+          <li>No third-party data sharing without explicit user consent</li>
+          <li>Annual security audits by certified third parties</li>
+          <li>Secure M-Pesa integration with direct bank partnerships</li>
+        </ul>
+
+        <h2>Responsible Supply Chain</h2>
+        <ul>
+          <li>Zero tolerance for child labor or forced labor</li>
+          <li>
+            Compliance with Kenya's Environmental Management and Coordination
+            Act
+          </li>
+          <li>
+            Support for women farmers with targeted training and market access
+            programs
+          </li>
+          <li>
+            Regular audits of partner farms for labor practices compliance
+          </li>
+        </ul>
+
+        <h2>Report an Concern</h2>
+        <p>
+          If you believe JijiMove has violated our ethics standards, we
+          encourage you to report it confidentially.
+        </p>
+        <ul>
+          <li>Email: ethics@jijimove.ke</li>
+          <li>Hotline: +254 (0)723 456 7890 (24/7)</li>
+          <li>Anonymous Tip Line: Available through our mobile app</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
